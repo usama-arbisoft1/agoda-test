@@ -3,5 +3,11 @@
     "lastName" : "Jalal",
     "email" : "usama.jalal@arbisoft.com",
     "country" : "Pakistan",
-    "number" : "3224458223"
+    "number" : "3224458223",
+    "birthDate" : 12,
+    "birthMonth" : 11,
+    "birthYear" : 1995,
+    "passportNumber" : "A1234567",
+    "passportExpiryDate" : 12,
+    "passportExpiryYear" : 2025
 }

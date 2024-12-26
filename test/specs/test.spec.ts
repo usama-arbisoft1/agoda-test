@@ -22,20 +22,27 @@ describe("Agoda Flight Booking Feature" , () => {
         addParentSuite("Tests for web interface");
         let origin = "Berlin (BER)"
         let destination = "New York (NY) (JFK)"
-        let fromDate ="2024-12-27"
-        let toDate="2024-12-30"  
+        let fromDate =  new Date("2025-01-18")
+        let toDate=new Date("2025-01-23")
         let ticketCount = 2
-        let originShortCode = "BER"
-        let destinationShortCode = "JFK"
+        let SearchPageData = {
+            datesDate : {
+                departureDate: "",
+                returnDate: ""
+            },
+            airportShortcodes : {
+                origin : "",
+                destination : ""
+            }
+        }
         await step("Navigate To Agoda" , async ()=>{
             await browser.url('https://www.agoda.com')
         })
         await step("Search Flight" , async ()=>{
-            await homePage.searchFlight(origin , destination, fromDate , toDate , "premium" , ticketCount , 4)
+            SearchPageData = await homePage.searchFlight(origin , destination, 2 , 2, fromDate , toDate , "Premium" , ticketCount , "Flight")
         })
-        // addAttachment("Screenshot", fs.readFileSync("./test/Images/screenshots/searchBox.png"), "image/png");
         await step("Verify Flight Search Results" , async ()=>{
-            await resultPage.VerifyResultPageData(origin , destination , originShortCode, destinationShortCode , homePage.departureDateAttribute , homePage.returnDateAttribute)
+            await resultPage.VerifyResultPageData(origin , destination , SearchPageData.airportShortcodes.origin , SearchPageData.airportShortcodes.destination , SearchPageData.datesDate.departureDate , SearchPageData.datesDate.returnDate)
         })
         await step("Verify Return Flight Page" , async ()=>{
             await returnFlight.verifyReturnFlightPage(origin , destination)

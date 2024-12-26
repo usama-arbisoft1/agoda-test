@@ -1,4 +1,4 @@
-import { addDurations } from '../../helper';
+import { addDurations, verifyFlightParts } from '../../helper';
 class resultPage {
     private get flightFilterToggle(){
         return $('label[data-element-name="flight-filter-airline-toggle"]')
@@ -33,15 +33,15 @@ class resultPage {
     private get flightDetailButton(){
         return $('div[data-element-name="flight-detail-button"]')
     }
-    private async verifySingleDestination(destination : string , element : ChainablePromiseElement){
+    private async verifySingleDestination(airport : string , element : ChainablePromiseElement){
         await browser.waitUntil(async () =>  await element.getValue() !== ""
         , {
             timeout : 20000,
             timeoutMsg : "Not fount in 10 Sec",
             interval : 1000
         })
-        let fromDest = await element.getValue()
-        await expect(fromDest).toEqual(destination)
+        let destination = await element.getValue()
+        await expect(destination).toEqual(airport)
     }
     private async verifyDestinationsData (from : string , to : string){
         await this.flightFilterToggle.waitForClickable({timeout : 30000});
@@ -54,7 +54,7 @@ class resultPage {
         await expect(dateRange).toEqual(departureDate + ' — ' + arrivalDate)
     }
     private async verifyBestResellerOption (){
-        browser.waitUntil(async () => await this.bestOverallButton.isClickable())
+        await this.bestOverallButton.waitForClickable()
         await expect(this.bestOverallButton).toHaveElementClass('a2578-text-product-primary', { message: 'Best Overall isnt selected by default!' })
     }
     private async clickFirstListElement(){
@@ -62,26 +62,6 @@ class resultPage {
         await this.firstCard.waitForClickable()
         await this.firstCard.click();
     }
-    private async verifyParts(selectedfrom : string, selectedTo : string){
-        let first = true
-        let last = ""
-        let orignElements = await this.firstCard.$$('p[data-testid="origin-airport"]')
-        for (const airport of orignElements) {
-            await airport.waitForClickable({ timeout: 5000, timeoutMsg: 'From Airport not found in parts' });
-            if(first){
-                let airportName = await airport.getText()
-                airportName = airportName.replace(" • ", "");
-                await expect(airportName).toEqual(selectedfrom)
-            }else{
-                let airportName = await airport.getText()
-                last = airportName.replace(" • ", "");
-                selectedfrom = last
-            }
-            first = !first
-        }
-        await expect(last).toEqual(selectedTo)
-    }
-
     private async verifyOrigin(originShortCode : string){
         await this.originCard.waitForDisplayed({timeout : 5000 , timeoutMsg : "Orign Text not available"})
         await expect(await this.originCard.getText()).toEqual(originShortCode)
@@ -114,7 +94,7 @@ class resultPage {
         await this.verifyDates(departureDate , arrivalDate)
         await this.verifyBestResellerOption()
         await this.clickFirstListElement()
-        await this.verifyParts(from, to)
+        await verifyFlightParts(from, to)
         await this.verifyOrigin(originShortCode)
         await this.verifyDestinations(destinationShortCode)
         await this.verifyTime()

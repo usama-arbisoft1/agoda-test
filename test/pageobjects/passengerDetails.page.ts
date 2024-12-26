@@ -25,10 +25,10 @@ class passengerDetails {
         return this.ContactFormBox.$('input[datatestid="contact.contactPhoneNumber-PhoneNumberDataTestId"]')
     }
     private get departureFrom(){
-        return $$('div[action-element-name="mob-flight-details-expand"]')[0].$('div[data-component="mob-flight-slice-originAirportCode"]')
+        return $('div[action-element-name="mob-flight-details-expand"]').$('div[data-component="mob-flight-slice-originAirportCode"]')
     }
     private get departureTo(){
-        return $$('div[action-element-name="mob-flight-details-expand"]')[0].$('div[data-component="mob-flight-slice-destinationAirportCode"]')
+        return $('div[action-element-name="mob-flight-details-expand"]').$('div[data-component="mob-flight-slice-destinationAirportCode"]')
     }
     private get arrivalFrom(){
         return $$('div[action-element-name="mob-flight-details-expand"]')[1].$('div[data-component="mob-flight-slice-originAirportCode"]')
@@ -36,52 +36,53 @@ class passengerDetails {
     private get arrivalTo(){
         return $$('div[action-element-name="mob-flight-details-expand"]')[1].$('div[data-component="mob-flight-slice-destinationAirportCode"]')
     }
-    private MaleCheckboxInput(num : number){
-        return $('div[data-testid="flight.forms.i0.units.i'+num+'.passengerGender"]').$('input[type="radio"][aria-label="Male"]')
+    private MaleCheckboxInput(passengerNumber : number){
+        return $(`div[data-testid="flight.forms.i0.units.i${passengerNumber}.passengerGender"]`).$('input[type="radio"][aria-label="Male"]')
     }
-    private FemaleCheckboxInput(num : number){
-        return $('div[data-testid="flight.forms.i0.units.i'+num+'.passengerGender"]').$('input[type="radio"][aria-label="Female"]')
+    private FemaleCheckboxInput(passengerNumber : number){
+        return $(`div[data-testid="flight.forms.i0.units.i${passengerNumber}.passengerGender"]`).$('input[type="radio"][aria-label="Female"]')
     }
-    private FirstName(num : number){
-        return $('input[datatestid="flight.forms.i0.units.i'+num+'.passengerFirstName"]')
+    private FirstName(passengerNumber : number){
+        return $(`input[datatestid="flight.forms.i0.units.i${passengerNumber}.passengerFirstName"]`)
     }
-    private LastName(num : number){
-        return $('input[datatestid="flight.forms.i0.units.i'+num+'.passengerLastName"]')
+    private LastName(passengerNumber : number){
+        return $(`input[datatestid="flight.forms.i0.units.i${passengerNumber}.passengerLastName"]`)
     }
-    private BirthdayDay(num : number){
-        return $('input[datatestid="flight.forms.i0.units.i'+num+'.passengerDateOfBirth-DateInputDataTestId"]')
+    private BirthdayDay(passengerNumber : number){
+        return $(`input[datatestid="flight.forms.i0.units.i${passengerNumber}.passengerDateOfBirth-DateInputDataTestId"]`)
     }
-    private BirthdayMonthButton(num : number){
-        return $('div[data-testid="flight.forms.i0.units.i'+num+'.passengerDateOfBirth-MonthInputDataTestId"]').$('button')
+    private BirthdayMonthButton(passengerNumber : number){
+        return $(`div[data-testid="flight.forms.i0.units.i${passengerNumber}.passengerDateOfBirth-MonthInputDataTestId"]`).$('button')
     }
-    private BirthdayYear(num : number){
-        return $('input[datatestid="flight.forms.i0.units.i'+num+'.passengerDateOfBirth-YearInputDataTestId"]')
+    private BirthdayYear(passengerNumber : number){
+        return $(`input[datatestid="flight.forms.i0.units.i${passengerNumber}.passengerDateOfBirth-YearInputDataTestId"]`)
     }
-    private NationalityOptions(num : number){
-        return $('div[data-testid="flight.forms.i0.units.i'+num+'.passengerNationality"]').$('button')
+    private NationalityOptions(passengerNumber : number){
+        return $(`div[data-testid="flight.forms.i0.units.i${passengerNumber}.passengerNationality"]`).$('button')
     }
-    private PassportNationalityButton(num : number){
-        return $('div[data-testid="flight.forms.i0.units.i'+num+'.passportCountryOfIssue"]').$('button')
+    private PassportNationalityButton(passengerNumber : number){
+        return $(`div[data-testid="flight.forms.i0.units.i${passengerNumber}.passportCountryOfIssue"]`).$('button')
     }
-    private PassportExpDay(num : number){
-        return $('input[datatestid="flight.forms.i0.units.i'+num+'.passportExpiryDate-DateInputDataTestId"]')
+    private PassportExpDay(passengerNumber : number){
+        return $(`input[datatestid="flight.forms.i0.units.i${passengerNumber}.passportExpiryDate-DateInputDataTestId"]`)
     }
-    private PassportExpMonthButton(num : number){
-        return $('div[data-testid="flight.forms.i0.units.i'+num+'.passportExpiryDate-MonthInputDataTestId"]').$('button')
+    private PassportExpMonthButton(passengerNumber : number){
+        return $(`div[data-testid="flight.forms.i0.units.i${passengerNumber}.passportExpiryDate-MonthInputDataTestId"]`).$('button')
     }
-    private PassportExpYear(num : number){
-        return $('input[datatestid="flight.forms.i0.units.i'+num+'.passportExpiryDate-YearInputDataTestId"]')
+    private PassportExpYear(passengerNumber : number){
+        return $(`input[datatestid="flight.forms.i0.units.i${passengerNumber}.passportExpiryDate-YearInputDataTestId"]`)
     }
     private get submitButton(){
         return $('button[data-testid="continue-to-payment-button"]')
     }
-    private passportField(num:number){
-        return $('input[datatestid="flight.forms.i0.units.i'+num+'.passportNumber"]')
+    private passportField(passengerNumber:number){
+        return $('input[datatestid="flight.forms.i0.units.i'+passengerNumber+'.passportNumber"]')
     }
     public async verifyPassengerDetailsPage(from : string , to: string){
         await this.checkContactForm()
         await this.verifyAirports(from , to)
-        await this.fillPassengerDetails()
+        await this.setPassengerDetails(0)
+        await this.setPassengerDetails(1)
         await this.submitPassengerDetails()
     }
     async checkContactForm(){
@@ -92,7 +93,9 @@ class passengerDetails {
         await this.setNumber(PassengerData.number)
     }
     async setName(firstname : string , lastname : string){
+        await this.ContactFirstName.clearValue()
         await this.ContactFirstName.setValue(firstname)
+        await this.ContactLastName.clearValue()
         await this.ContactLastName.setValue(lastname)
     }
     async verifyName(firstname : string , lastname : string){
@@ -134,37 +137,37 @@ class passengerDetails {
         toAirport = await this.arrivalTo.getText()
         await expect(toAirport).toEqual(from)
     }
-    async fillPassengerDetails(){
-        await this.PassengerData(0)
-        await this.PassengerData(1)
+    async setPassengerDetails(passengerNumber : number){
+        await this.PassengerData(passengerNumber)
     }
     async PassengerData(num : number){
         // await passengerDetails.MaleCheckboxInput(num).waitForClickable()
         await this.MaleCheckboxInput(num).click()
 
         await this.FirstName(num).waitForDisplayed()
-        await this.FirstName(num).setValue("Pass")
+        await this.FirstName(num).setValue(PassengerData.firstName)
 
         await this.LastName(num).waitForDisplayed()
-        await this.LastName(num).setValue("Lass name")
+        await this.LastName(num).setValue(PassengerData.lastName)
 
-        await this.BirthdayDay(num).setValue(12)
+        await this.BirthdayDay(num).setValue(PassengerData.birthDate)
         await this.BirthdayMonthButton(num).waitForClickable()
         await this.BirthdayMonthButton(num).click()
         await this.FirstDropDownOption.waitForClickable()
         await this.FirstDropDownOption.click()
-        await this.BirthdayYear(num).setValue(1990)
+        await this.BirthdayYear(num).setValue(PassengerData.birthYear)
+        await this.NationalityOptions(num).scrollIntoView()
         await this.NationalityOptions(num).waitForClickable()
         await this.NationalityOptions(num).click()
         await this.FirstDropDownOption.waitForClickable()
         await this.FirstDropDownOption.click()
-        // await this.passportField(num).setValue("123123123123")
-        // await this.PassportExpDay(num).setValue(11)
+        // await this.passportField(num).setValue(PassengerData.passportNumber)
+        // await this.PassportExpDay(num).setValue(PassengerData.passportExpiryDate)
         // await this.PassportExpMonthButton(num).waitForClickable()
         // await this.PassportExpMonthButton(num).click()
         // await this.FirstDropDownOption.waitForClickable()
         // await this.FirstDropDownOption.click()
-        // await this.PassportExpYear(num).setValue(2034)
+        // await this.PassportExpYear(num).setValue(PassengerData.passportExpiryYear)
         // await this.PassportNationalityButton(num).waitForClickable()
         // await this.PassportNationalityButton(num).click()
         // await this.FirstDropDownOption.waitForClickable()

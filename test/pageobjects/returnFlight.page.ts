@@ -1,21 +1,21 @@
-import { addDurations } from '../../helper';
+import { addDurations, verifyFlightParts } from '../../helper';
 class returnFlight {
-    public get firstReturnFlightCard(){
+    private get firstReturnFlightCard(){
         return  $$('div[data-element-name="flight-detail-button"]')[1]
     }
-    public get OriginAirportElement(){
-        return this.firstReturnFlightCard.$$('p[data-testid="origin-airport"]')
-    }
-    public get selectButton(){
+    private get selectButton(){
         return this.firstReturnFlightCard.$('button[data-component="flight-card-bookButton"]')
     }
-    public get durationSpan(){
+    private get addToCartButton(){
+        return this.firstReturnFlightCard.$('button[data-element-name="flights-details-add-to-cart"]')
+    }
+    private get durationSpan(){
         return this.firstReturnFlightCard.$('span[data-testid="duration"]')
     }
-    public get timeDurationParts(){
+    private get timeDurationParts(){
         return this.firstReturnFlightCard.$$('p[data-testid="duration"]')
     }
-    public get layoverTimes(){
+    private get layoverTimes(){
         return this.firstReturnFlightCard.$$('div[data-testid="layover"] p')
     }
     private async selectReturnFlight(){
@@ -26,24 +26,6 @@ class returnFlight {
         let firstCard = this.firstReturnFlightCard
         await firstCard.waitForClickable()
         await firstCard.click()
-    }
-    private async verifyReturnFlightParts(selectedfrom : string, selectedTo : string){
-        let first = true
-        let last = ""
-        let orignElements = await this.OriginAirportElement
-        for (const airport of orignElements) {
-            await airport.waitForClickable({ timeout: 5000, timeoutMsg: 'From Airport not found in parts' });
-            let airportName = await airport.getText()
-            airportName = airportName.replace(" • ", "")
-            if(first){
-                await expect(airportName).toEqual(selectedfrom)
-            }else{
-                selectedfrom = last = airportName
-                console.log(selectedfrom , last , airportName)
-            }
-            first = !first
-        }
-        await expect(last).toEqual(selectedTo)
     }
     private async verifyReturnFlightTime(){
         let totalTime = "0h 0m"
@@ -66,7 +48,7 @@ class returnFlight {
     }
     public async verifyReturnFlightPage(from : string , to : string){
         await this.clickReturnFirstCard()
-        await this.verifyReturnFlightParts(to , from);
+        await verifyFlightParts(to , from , 1);
         await this.verifyReturnFlightTime()
         await this.selectReturnFlight()
     }

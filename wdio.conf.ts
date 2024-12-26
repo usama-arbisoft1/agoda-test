@@ -1,4 +1,3 @@
-import 'dotenv/config'
 import * as os from "os";
 export const config: WebdriverIO.Config = {
     //
@@ -47,14 +46,17 @@ export const config: WebdriverIO.Config = {
     // and 30 processes will get spawned. The property handles how many capabilities
     // from the same test should run tests.
     //
-    maxInstances: 10,
+    maxInstances: 1,
     //
     // If you have trouble getting all important capabilities together, check out the
     // Sauce Labs platform configurator - a great tool to configure your capabilities:
     // https://saucelabs.com/platform/platform-configurator
     //
     capabilities: [{
-        browserName: 'chrome'
+        browserName: 'chrome',
+        'goog:chromeOptions': {
+            args: ['headless', 'disable-gpu', '--no-sandbox' , '--disable-infobars', '--window-size=1920,1080' , 'user-agent=Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.50 Safari/537.36']
+        }
     }],
 
     //
@@ -147,7 +149,8 @@ export const config: WebdriverIO.Config = {
     // See the full list at http://mochajs.org/
     mochaOpts: {
         ui: 'bdd',
-        timeout: 60000
+        timeout: 120000,
+        retries: 0
     },
 
     //
@@ -244,8 +247,11 @@ export const config: WebdriverIO.Config = {
      * @param {boolean} result.passed    true if test has passed, otherwise false
      * @param {object}  result.retries   information about spec related retries, e.g. `{ attempts: 0, limit: 0 }`
      */
-    // afterTest: function(test, context, { error, result, duration, passed, retries }) {
-    // },
+    afterTest: async function(test, context, { error }) {
+        if (error) {
+            await browser.saveScreenshot(`./screenshots/${test.title.replace(/\s+/g, '_')}.png`);
+        }
+    }
 
 
     /**
