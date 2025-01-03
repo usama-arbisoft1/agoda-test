@@ -2,3 +2,4 @@ node_modules/**
 .tmp/**
 allure-results/
 screenshots/
+allure-report/
