@@ -49,7 +49,7 @@ jobs:
           git config --global user.email "actions@github.com"
           git config --global user.name "github-actions"
           git clone https://$PAT_TOKEN@github.com/$TARGET_REPO.git
-          cp -r allure-report/* $TARGET_REPO/allure-report/
+          cp -r allure-report/* $TARGET_REPO/
           cd $TARGET_REPO
           git add .
           git commit -m "Upload Allure report from pipeline"
