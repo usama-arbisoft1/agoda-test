@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - "pipeline-update"
+  workflow_dispatch:
 
 jobs:
   build:
@@ -38,29 +39,31 @@ jobs:
         with:
           name: allure-report
           path: allure-report
-      # - name: Load test report history
-      #   uses: actions/checkout@v4
-      #   if: always()
-      #   continue-on-error: true
-      #   with:
-      #     ref: gh-pages
-      #     path: gh-pages
+      
 
-      # - name: Build test report
-      #   uses: simple-elf/allure-report-action@master
-      #   if: always()
-      #   with:
-      #     allure_results: allure-results
-      #     allure_history: allure-history
-      #     keep_reports: 20
+       - name: Upload Allure Report to Public Repo
+        if: always()
+        env:
+          PAT_TOKEN: ${{ secrets.PAT_TOKEN }}
+          TARGET_REPO: "usama-arbisoft1/agoda-reports.git"
+        run: |
+          git config --global user.email "actions@github.com"
+          git config --global user.name "github-actions"
 
-      # - name: Publish test report
-      #   uses: peaceiris/actions-gh-pages@v3
-      #   if: always()
-      #   with:
-      #     github_token: ${{ secrets.GITHUB_TOKEN }}
-      #     publish_branch: gh-pages
-      #     publish_dir: allure-history
+          # Clone the target repository
+          git clone https://$PAT_TOKEN@github.com:$TARGET_REPO
+          
+          # Copy Allure report to the target repo
+          cp -r allure-report/* $TARGET_REPO/allure-report/
+          
+          cd $TARGET_REPO
+
+          # Stage and commit the changes
+          git add .
+          git commit -m "Upload Allure report from pipeline"
+
+          # Push the changes to the main branch
+          git push origin main
 
       - name: Upload screenshots
         uses: actions/upload-artifact@v4
