@@ -41,7 +41,6 @@ jobs:
           path: allure-report
 
       - name: Upload Allure Report to Repo
-        depends: Upload Allure Report
         if: always()
         env:
           PAT_TOKEN: ${{ secrets.PAT_TOKEN }}
