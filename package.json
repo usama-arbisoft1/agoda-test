@@ -10,7 +10,10 @@
     "@wdio/visual-service": "^6.2.4"
   },
   "scripts": {
-    "wdio" : "wdio run ./wdio.conf.ts",
-    "allure-generate" : "allure generate allure-results"
+    "wdio": "wdio run ./wdio.conf.ts",
+    "allure-generate": "allure generate allure-results"
+  },
+  "dependencies": {
+    "allure-commandline": "^2.32.0"
   }
 }
